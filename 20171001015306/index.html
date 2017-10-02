@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="applicable-device" content="pc">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <title>在ubuntu下为nginx配置支持cgi脚本的方案_nginx_脚本之家</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <meta name="keywords" content="nginx,cgi,配置,nginx,php,cgi,配置,ubuntu,nginx启动脚本">
+    <meta name="description" content="本文的需求：让nginx能够解析.cgi后缀的文件，相信会特意看这篇文章的人对CGI是什么及其作用已经有了足够的了解，所以在这里不再赘述，直接开始配置。">
+    <link rel="alternate" media="only screen and(max-width: 640px)" href="http://m.jb51.net/article/106375.htm">
+    <meta http-equiv="mobile-agent" content="format=html5; url=http://m.jb51.net/article/106375.htm">
+    <meta http-equiv="mobile-agent" content="format=xhtml; url=http://m.jb51.net/article/106375.htm">
+
+    <!--<link type="text/css" href="base.css" rel="stylesheet">-->
+    <!--<link type="text/css" href="common.css" rel="stylesheet">-->
+    <link rel="prefetch" href="https://securepubads.g.doubleclick.net/static/3p_cookie.html">
+
+    <!--<link rel="stylesheet" type="text/css" href="upload-img.css">-->
+    <style id="changyanCss">
+</style>
+    <!--<link charset="utf-8" rel="stylesheet" href="changyan2.css">-->
+    <!--<link charset="utf-8" rel="stylesheet" href="default.css">-->
+    <link rel="stylesheet" href="./all.css">
+</head>
+<body style="">
+
+<div id="head">
+
+    <!--content Star -->
+    <div id="contents">
+        <div class="main clearfix">
+            <div class="w690 fl">
+                <div class="article-content border">
+                    <div class="title">
+                        <h1 class="YaHei">在ubuntu下为nginx配置支持cgi脚本的方案</h1>
+
+                    </div>
+
+                    <div id="content">
+                        <p>在nginx下支持cgi脚本于支持node类似的，只要在nginx直接做个转发，转发到对应的cgi套接字就好。</p>
+                        <p><strong>使用Fcgiwrap</strong></p>
+                        <p>Fcgiqwrap是另外一个CGI封装库，跟Simple CGI类似。</p>
+                        <p><strong>安装fcgiwrap</strong></p>
+                        <p><code>apt-get install fcgiwrap</code><br>
+                        </p>
+                        <p>安装以后fcgiwrap默认已经启动，对应的套接字是 /var/run/fcgiwrap.socket 。如果没有启动，使用 /etc/init.d/fcgiwrap 手动启动。</p>
+                        <p><strong>配置nginx的vhost文件</strong></p>
+                        <p>在要支持cgi脚本的路径下，添加对应的server配置。比如所有的cgi都在cgi-bin路径下：</p>
+                        <div class="jb51code">
+                            <div><div id="highlighter_970057" class="syntaxhighlighter  plain"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div><div class="line number11 index10 alt2">11</div><div class="line number12 index11 alt1">12</div><div class="line number13 index12 alt2">13</div><div class="line number14 index13 alt1">14</div><div class="line number15 index14 alt2">15</div><div class="line number16 index15 alt1">16</div><div class="line number17 index16 alt2">17</div><div class="line number18 index17 alt1">18</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="plain plain">server {</code></div><div class="line number2 index1 alt1"><code class="plain plain">[...]</code></div><div class="line number3 index2 alt2"><code class="plain spaces">&nbsp;&nbsp;</code><code class="plain plain">location /cgi-bin/ {</code></div><div class="line number4 index3 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Disable gzip (it makes scripts feel slower since they have to complete</code></div><div class="line number5 index4 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># before getting gzipped)</code></div><div class="line number6 index5 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain">gzip off;</code></div><div class="line number7 index6 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Set the root to /usr/lib (inside this location this means that we are</code></div><div class="line number8 index7 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># giving access to the files under /usr/lib/cgi-bin)</code></div><div class="line number9 index8 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain">root /var/www/www.example.com;</code></div><div class="line number10 index9 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Fastcgi socket</code></div><div class="line number11 index10 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain">fastcgi_pass unix:/var/run/fcgiwrap.socket;</code></div><div class="line number12 index11 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Fastcgi parameters, include the standard ones</code></div><div class="line number13 index12 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain">include /etc/nginx/fastcgi_params;</code></div><div class="line number14 index13 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Adjust non standard parameters (SCRIPT_FILENAME)</code></div><div class="line number15 index14 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain">fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;</code></div><div class="line number16 index15 alt1"><code class="plain spaces">&nbsp;&nbsp;</code><code class="plain plain">}</code></div><div class="line number17 index16 alt2"><code class="plain plain">[...]</code></div><div class="line number18 index17 alt1"><code class="plain plain">}</code></div></div></td></tr></tbody></table></div></div>
+                        </div>
+                        <p><strong>重新加载nginx：</strong></p>
+                        <p><code>nginx -s reload</code><br>
+                        </p>
+                        <p><strong>测试</strong></p>
+                        <p>在cgi-bin下创建hello-world.cgi</p>
+                        <div class="jb51code">
+                            <div><div id="highlighter_259688" class="syntaxhighlighter  plain"><div class="toolbar"><span><a href="#" class="toolbar_item command_help help">?</a></span></div><table cellspacing="0" cellpadding="0" border="0"><tbody><tr><td class="gutter"><div class="line number1 index0 alt2">1</div><div class="line number2 index1 alt1">2</div><div class="line number3 index2 alt2">3</div><div class="line number4 index3 alt1">4</div><div class="line number5 index4 alt2">5</div><div class="line number6 index5 alt1">6</div><div class="line number7 index6 alt2">7</div><div class="line number8 index7 alt1">8</div><div class="line number9 index8 alt2">9</div><div class="line number10 index9 alt1">10</div></td><td class="code"><div class="container"><div class="line number1 index0 alt2"><code class="plain plain">#!/usr/bin/perl -w</code></div><div class="line number2 index1 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># Tell perl to send a html header.</code></div><div class="line number3 index2 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># So your browser gets the output</code></div><div class="line number4 index3 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># rather then &lt;stdout&gt;(command line</code></div><div class="line number5 index4 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># on the server.)</code></div><div class="line number6 index5 alt1"><code class="plain plain">print "Content-type: text/html\n\n";</code></div><div class="line number7 index6 alt2"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># print your basic html tags.</code></div><div class="line number8 index7 alt1"><code class="plain spaces">&nbsp;&nbsp;&nbsp;</code><code class="plain plain"># and the content of them.</code></div><div class="line number9 index8 alt2"><code class="plain plain">print "&lt;html&gt;&lt;head&gt;&lt;title&gt;Hello World!! &lt;/title&gt;&lt;/head&gt;\n";</code></div><div class="line number10 index9 alt1"><code class="plain plain">print "&lt;body&gt;&lt;h1&gt;Hello world&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;\n";</code></div></div></td></tr></tbody></table></div></div>
+                        </div>
+                        <p>设置执行权限</p>
+                        <p><code>chmod 755 /var/www/www.example.com/cgi-bin/hello_world.cgi</code><br>
+                        </p>
+                        <p>在浏览器打开对应脚本，即可看到已经配置成功！ http://www.example.com/cgi-bin/hello_world.cgi</p>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div id="footer">
+        <div class="main clearfix">
+
+            <p>©CopyRight 2006-2017 JB51.Net Inc All Rights Reserved. 脚本之家 版权所有</p>
+        </div>
+    </div>
+    <!--<link type="text/css" rel="stylesheet" href="shCore.css">-->
+    <!--<link type="text/css" rel="Stylesheet" href="shThemeDefault.css">-->
+
+</div></body>
+</html>

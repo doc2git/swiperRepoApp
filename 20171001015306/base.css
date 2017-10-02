@@ -1,0 +1,19 @@
+/* Code tidied up by ScrapBook */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, textarea, p, blockquote, th, td, hr, button, article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { margin: 0px; padding: 0px; }
+body, button, input, select, textarea { font: 12px/1.5 tahoma,arial,宋体; }
+table { border-collapse: collapse; border-spacing: 0px; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: 500; }
+a { color: rgb(51, 51, 51); }
+a:hover { color: rgb(187, 64, 70); text-decoration: underline; }
+a:focus { outline: 0px none; }
+ins, a { text-decoration: none; }
+.clearfix {  }
+.clearfix::before, .clearfix::after { content: "."; display: block; height: 0px; overflow: hidden; visibility: hidden; }
+.clearfix::after { clear: both; }
+.fl { float: left; }
+.YaHei { font-family: "Microsoft YaHei"; }
+.w690 { width: 690px; }
+@font-face {
+  font-family: "iconfont";
+  src: url("iconfont.eot") format("embedded-opentype"), url("iconfont.woff") format("woff"), url("iconfont.ttf") format("truetype"), url("iconfont.svg") format("svg");
+}

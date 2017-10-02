@@ -1,0 +1,138 @@
+<html><head>
+    <meta charset="UTF-8">
+    <title>让Nginx支持CGI执行Bash,Python等脚本 | 小峰网络遨游记</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <!--[if lt IE 9]><script src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+    <!--[if gt IE 4]>
+    <div style='border: 1px solid #F7941D; background: #FEEFDA; text-align: center; clear: both; height: 77px; position: relative;'>
+        <div style='width: 640px; margin: 0 auto; text-align: left; padding: 0; overflow: hidden; color: black;'>
+            <div style='width: 75px; float: left;'>
+                <img src='http://img.xfeng.me/yupoo/E2yrSvfX.jpg' alt='Warning!'/>
+            </div>
+            <div style='width: 275px; float: left; font-family: Arial, sans-serif;'>
+                <div style='font-size: 14px; font-weight: bold; margin-top: 12px;'>本网站不支持IE浏览器</div>
+                <div style='font-size: 12px; margin-top: 6px; line-height: 12px;'>请选择一款更好的浏览器，以获得最佳的浏览体验。</div>
+            </div>
+            <div style='width: 75px; float: left;'>
+                <a href='http://www.google.com/chrome' target='_blank' rel="nofollow"><img src='http://img.xfeng.me/yupoo/E2yrRGHk.jpg' style='border: none;' alt='Get Google Chrome'/></a>
+            </div>
+            <div style='width: 75px; float: left;'>
+                <a href='http://www.firefox.com' target='_blank' rel="nofollow"><img src='http://img.xfeng.me/yupoo/E2yvYd4S.jpg' style='border: none;' alt='Get Firefox'/></a>
+            </div>
+            <div style='float: left;'>
+                <a href='http://www.apple.com/safari/download/' target='_blank' rel="nofollow"><img src='http://img.xfeng.me/yupoo/E2ywjvCl.jpg' style='border: none;' alt='Get Safari'/></a>
+            </div>
+        </div>
+    </div>
+    <![endif]-->
+    <script charset="utf-8" src="about:blank"></script><script charset="utf-8" src="about:blank"></script><script charset="utf-8" src="about:blank"></script><script src="about:blank"></script><script src="about:blank"></script><script async="" src="about:blank"></script><script type="text/javascript">/* Code removed by ScrapBook */</script>
+    <script>/* Code removed by ScrapBook */</script>
+    <script type="text/javascript" async="" src="about:blank" charset="UTF-8"></script><script src="about:blank"></script><link rel="prefetch" href="javascript:;"><link rel="stylesheet" href="share_style0_24.css"><style>
+</style></head>
+<body>
+<div id="container">
+    <section id="main">
+        <article id="post-nginx-support-fcgi" class="article article-type-post" itemscope="" itemprop="blogPost">
+            <div class="article-inner">
+                <header class="article-header">
+                    <h1 class="article-title" itemprop="name">
+                        让Nginx支持CGI执行Bash,Python等脚本
+                    </h1>
+                    <meta content="http://xfeng.me/nginx-support-fcgi/" itemprop="url">
+                </header>
+                <div class="article-entry" itemprop="articleBody">
+                    <div id="toc" class="toc-article">
+                        <ol class="toc">
+                            <li class="toc-item toc-level-2"><a class="toc-link" href="#spawn-fcgi"><span class="toc-number">1.</span> <span class="toc-text">spawn-fcgi</span></a></li>
+                            <li class="toc-item toc-level-2"><a class="toc-link" href="#fcgi"><span class="toc-number">2.</span> <span class="toc-text">fcgi</span></a></li>
+                            <li class="toc-item toc-level-2"><a class="toc-link" href="#fcgiwrap"><span class="toc-number">3.</span> <span class="toc-text">fcgiwrap</span></a></li>
+                            <li class="toc-item toc-level-2"><a class="toc-link" href="#fcgiwrap__u542F_u52A8_u811A_u672C"><span class="toc-number">4.</span> <span class="toc-text">fcgiwrap 启动脚本</span></a></li>
+                            <li class="toc-item toc-level-2"><a class="toc-link" href="#Nginx"><span class="toc-number">5.</span> <span class="toc-text">Nginx</span></a></li>
+                        </ol>
+                    </div>
+                    <p>由于想通过页面查看VPS使用的流量，以前用的是vnstat，非常不错的一个工具，但是几个前端插件都是需要PHP环境，但是现在将博客改用Hexo后，完全静态化，只启动了一个Nginx，不想启动php-fpm，最后找到了vnstatsvg这个项目，使用CGI的方式来获取数据，最后生成svg图片来展示，满足我的需求。</p>
+                    <p>那问题就来了，我后端使用的是Nginx，并非Httpd，Nginx原生不支持CGI执行，之前工作上写的很多CGI都是通过Apache Httpd来执行，以前虽然看过Nginx使用fcgi执行CGI脚本的文章，但从没实践过，这次实战一次。</p>
+                    <h2 id="spawn-fcgi"><a href="#spawn-fcgi" class="headerlink" title="spawn-fcgi"></a><strong>spawn-fcgi</strong></h2>
+                    <p>spawn-fcgi原来是Lighttpd中的模块，现在已经独立出来，由于Nginx不能直接执行外部CGI程序，因此需要依赖spawn-fcgi来执行</p>
+                    <figure class="highlight bash">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td>
+                                <td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:lighttpd/spawn-fcgi.git</span><br><span class="line"><span class="built_in">cd</span> spawn-fcgi</span><br><span class="line">./autogen.sh</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <p>从github获取spawn-fcgi最新代码，然后编译安装
+                        <br>
+                        <a id="more"></a>
+                    </p>
+                    <h2 id="fcgi"><a href="#fcgi" class="headerlink" title="fcgi"></a><strong>fcgi</strong></h2>
+                    <p>安装完spawn-fcgi，还需要安装fcgi的库，我使用的系统是CentOS 6，所以直接去找了fcgi的rpm包安装，当然你也可以下载源码编译安装</p>
+                    <p>如果通过rpm包安装，因为还有fcgiwrap需要依赖fcgi的库编译，因此还需要将fcgi-devel也安装</p>
+                    <figure class="highlight bash">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td>
+                                <td class="code"><pre><span class="line">wget http://www.rpmseek.com/download/http://download.opensuse.org/repositories/home:/csbuild:/centosextra/CentOS_CentOS-<span class="number">6</span>/i686/fcgi-<span class="number">2.4</span>.<span class="number">1</span>-<span class="number">2.3</span>.i686.rpm</span><br><span class="line">wget ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/csbuild:/centosextra/CentOS_CentOS-<span class="number">6</span>/i686/fcgi-devel-<span class="number">2.4</span>.<span class="number">1</span>-<span class="number">2.3</span>.i686.rpm</span><br><span class="line">rpm -ivh fcgi-<span class="number">2.4</span>.<span class="number">1</span>-<span class="number">2.3</span>.i686.rpm</span><br><span class="line">rpm -ivh fcgi-devel-<span class="number">2.4</span>.<span class="number">1</span>-<span class="number">2.3</span>.i686.rpm</span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <h2 id="fcgiwrap"><a href="#fcgiwrap" class="headerlink" title="fcgiwrap"></a><strong>fcgiwrap</strong></h2>
+                    <p>最后就是安装fcgiwrap，这是一个非常轻量让Nginx执行CGI程序的wrapper</p>
+                    <p>从github获取最新版编译安装</p>
+                    <figure class="highlight bash">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td>
+                                <td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@github.com:gnosek/fcgiwrap.git</span><br><span class="line"><span class="built_in">cd</span> fcgiwrap</span><br><span class="line">autoreconf -i</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <h2 id="fcgiwrap__u542F_u52A8_u811A_u672C"><a href="#fcgiwrap__u542F_u52A8_u811A_u672C" class="headerlink" title="fcgiwrap 启动脚本"></a><strong>fcgiwrap 启动脚本</strong></h2>
+                    <p>为了可以方便的启动或停止fcgiwrap，使用RH或者CentOS的用户都可以使用这个方法，编写一个名为fcgiwarp的shell脚本放入/etc/init.d</p>
+                    <p>脚本内容如下，需要注意你的spawn-fcgi和fcgiwrap的安装目录是否和我一致，不一致请修改，还有Nginx的执行用户是否也为www，如果不是请改为你使用的用户</p>
+                    <figure class="highlight bash">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td>
+                                <td class="code"><pre><span class="line"><span class="shebang">#! /bin/bash</span></span><br><span class="line"><span class="comment">### BEGIN INIT INFO</span></span><br><span class="line"><span class="comment"># Provides:          fcgiwrap</span></span><br><span class="line"><span class="comment"># Required-Start:    $remote_fs</span></span><br><span class="line"><span class="comment"># Required-Stop:     $remote_fs</span></span><br><span class="line"><span class="comment"># Should-Start:</span></span><br><span class="line"><span class="comment"># Should-Stop:</span></span><br><span class="line"><span class="comment"># Default-Start:     2 3 4 5</span></span><br><span class="line"><span class="comment"># Default-Stop:      0 1 6</span></span><br><span class="line"><span class="comment"># Short-Description: FastCGI wrapper</span></span><br><span class="line"><span class="comment"># Description:       Simple server for running CGI applications over FastCGI</span></span><br><span class="line"><span class="comment">### END INIT INFO</span></span><br><span class="line"></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/sbin:/usr/<span class="built_in">local</span>/bin:/sbin:/bin:/usr/sbin:/usr/bin</span><br><span class="line">SPAWN_FCGI=<span class="string">"/usr/local/bin/spawn-fcgi"</span></span><br><span class="line">DAEMON=<span class="string">"/usr/local/sbin/fcgiwrap"</span></span><br><span class="line">NAME=<span class="string">"fcgiwrap"</span></span><br><span class="line"></span><br><span class="line">PIDFILE=<span class="string">"/var/run/<span class="variable">$NAME</span>.pid"</span></span><br><span class="line"></span><br><span class="line">FCGI_SOCKET=<span class="string">"/tmp/<span class="variable">$NAME</span>.socket"</span></span><br><span class="line">FCGI_USER=<span class="string">"www"</span></span><br><span class="line">FCGI_GROUP=<span class="string">"www"</span></span><br><span class="line">FORK_NUM=<span class="number">5</span></span><br><span class="line">SCRIPTNAME=/etc/init.d/<span class="variable">$NAME</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></span><br><span class="line">    start)</span><br><span class="line">        <span class="built_in">echo</span> -n <span class="string">"Starting <span class="variable">$NAME</span>... "</span></span><br><span class="line"></span><br><span class="line">        PID=`pidof <span class="variable">$NAME</span>`</span><br><span class="line">        <span class="keyword">if</span> [ ! -z <span class="string">"<span class="variable">$PID</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">" <span class="variable">$NAME</span> already running"</span></span><br><span class="line">            <span class="built_in">exit</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line">        <span class="variable">$SPAWN_FCGI</span> -u <span class="variable">$FCGI_USER</span> -g <span class="variable">$FCGI_GROUP</span> <span class="operator">-s</span> <span class="variable">$FCGI_SOCKET</span> -P <span class="variable">$PIDFILE</span> -F <span class="variable">$FORK_NUM</span> <span class="operator">-f</span> <span class="variable">$DAEMON</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> [ <span class="string">"$?"</span> != <span class="number">0</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">" failed"</span></span><br><span class="line">            <span class="built_in">exit</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">" done"</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    ;;</span><br><span class="line"></span><br><span class="line">    stop)</span><br><span class="line">        <span class="built_in">echo</span> -n <span class="string">"Stoping <span class="variable">$NAME</span>... "</span></span><br><span class="line"></span><br><span class="line">        PID=`pidof <span class="variable">$NAME</span>`</span><br><span class="line">        <span class="keyword">if</span> [ ! -z <span class="string">"<span class="variable">$PID</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">kill</span> `pidof <span class="variable">$NAME</span>`</span><br><span class="line">            <span class="keyword">if</span> [ <span class="string">"$?"</span> != <span class="number">0</span> ]; <span class="keyword">then</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">" failed. re-quit"</span></span><br><span class="line">                <span class="built_in">exit</span> <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                rm <span class="operator">-f</span> <span class="variable">$pid</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">" done"</span></span><br><span class="line">            <span class="keyword">fi</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$NAME</span> is not running."</span></span><br><span class="line">            <span class="built_in">exit</span> <span class="number">1</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    ;;</span><br><span class="line"></span><br><span class="line">    status)</span><br><span class="line">        PID=`pidof <span class="variable">$NAME</span>`</span><br><span class="line">        <span class="keyword">if</span> [ ! -z <span class="string">"<span class="variable">$PID</span>"</span> ]; <span class="keyword">then</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$NAME</span> (pid <span class="variable">$PID</span>) is running..."</span></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">            <span class="built_in">echo</span> <span class="string">"<span class="variable">$NAME</span> is stopped"</span></span><br><span class="line">            <span class="built_in">exit</span> <span class="number">0</span></span><br><span class="line">        <span class="keyword">fi</span></span><br><span class="line">    ;;</span><br><span class="line"></span><br><span class="line">    restart)</span><br><span class="line">        <span class="variable">$SCRIPTNAME</span> stop</span><br><span class="line">        sleep <span class="number">1</span></span><br><span class="line">        <span class="variable">$SCRIPTNAME</span> start</span><br><span class="line">    ;;</span><br><span class="line"></span><br><span class="line">    *)</span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Usage: <span class="variable">$SCRIPTNAME</span> {start|stop|restart|status}"</span></span><br><span class="line">        <span class="built_in">exit</span> <span class="number">1</span></span><br><span class="line">    ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <p>文件新建完成后，还需要加上执行权限，并且设置为开机自启，这样就不用每次手工去启动了</p>
+                    <figure class="highlight bash">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td>
+                                <td class="code"><pre><span class="line">chmod +x /etc/init.d/fcgiwrap</span><br><span class="line">chkconfig --add fcgiwrap</span><br><span class="line">chkconfig --level <span class="number">2345</span> fcgiwrap on</span><br><span class="line">/etc/init.d/fcgiwrap start</span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <p>执行完上面的命令，就设置好自启，并将fcgiwrap的daemon进程启动好了</p>
+                    <h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><strong>Nginx</strong></h2>
+                    <p>执行CGI的环境搞好后，就差Nginx的配置了，如果将CGI的请求转发给fcgiwrap执行</p>
+                    <figure class="highlight">
+                        <table>
+                            <tbody><tr>
+                                <td class="gutter"><pre><span class="line">1</span><br></pre></td>
+                                <td class="code"><pre><span class="line">location ~ ^/cgi-bin/.*\.(cgi|sh) {
+        gzip off;
+        fastcgi_pass  unix:/tmp/fcgiwrap.socket;
+        fastcgi_index index.cgi;
+        include fastcgi_params;
+        fastcgi_param  SCRIPT_NAME        $document_root$fastcgi_script_name;
+      }</span><br></pre></td>
+                            </tr>
+                            </tbody></table>
+                    </figure>
+                    <p>我将CGI脚本放在了根目录的cgi-bin目录中，然后判断如果是.cgi或.sh结尾的文件就将请求转发给fcgiwrap执行</p>
+                    <p>然后reload Nginx后就完成让Nginx执行CGI脚本的配置了，如果你还有perl或者Python脚本，只需要在Nginx配置中文件名后缀的判断加上对应后缀即可</p>
+                    <p>spawn-fcgi我只启动了5个进程去执行fcgiwrap，个人使用没有啥性能问题，如果你的CGI程序访问量大，可以将进程数调高试试</p>
+                </div>
+            </div>
+        </article>
+    </section>
+</div>
+</body></html>

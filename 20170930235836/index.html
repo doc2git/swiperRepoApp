@@ -1,0 +1,354 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" class="yui3-js-enabled" lang="en">
+<div id="yui3-css-stamp" style="position: absolute !important; visibility: hidden !important" class=""></div>
+<head>
+    <!--<base href="https://answers.launchpad.net/esys-particle/+question/365307/+index">-->
+    <meta charset="UTF-8">
+    <title>Question #365307 : Questions : ESyS-Particle</title>
+    <link rel="shortcut icon" href="./launchpad.png">
+    <link type="text/css" rel="stylesheet" media="screen, print" href="/data/20170930235836/combo.css">
+    <style type="text/css" media="screen">
+        div.confirmBox {
+            margin: 0;
+            padding-right: 0.5em;
+            padding-bottom: 0.5em;
+            text-align: right;
+        }
+    </style>
+</head>
+<body id="document" itemscope="" itemtype="http://schema.org/WebPage" class="tab-answers
+      main_side
+      public
+      yui3-skin-sam">
+<div id="yui_3_10_3_1_1506786516719_61" class="yui3-widget yui3-commentlist">
+    <div id="yui_3_10_3_1_1506786516719_63" class="yui3-commentlist-content"></div>
+</div>
+<div class="yui-d0" id="yui_3_10_3_1_1506786516719_143">
+    <div id="locationbar" class="login-logout">
+        <div id="logincontrol"><a href="https://answers.launchpad.net/esys-particle/+question/365307/+login">Log in /
+            Register</a></div>
+    </div><!--id="locationbar"-->
+    <div id="watermark" class="watermark-apps-portlet">
+        <div>
+            <a href="https://launchpad.net/esys-particle"><img alt=""
+                                                               src="https://launchpadlibrarian.net/14695411/silo_image.png"
+                                                               width="64" height="64"></a>
+        </div>
+        <div class="wide" id="yui_3_10_3_1_1506786516719_150">
+            <h2 id="watermark-heading"><a href="https://launchpad.net/esys-particle">ESyS-Particle</a></h2>
+        </div>
+        <!-- Application Menu -->
+        <ul class="facetmenu">
+            <li class="overview"><a href="https://launchpad.net/esys-particle">Overview</a></li>
+            <li class="branches"><a href="https://code.launchpad.net/esys-particle">Code</a></li>
+            <li class="bugs"><a href="https://bugs.launchpad.net/esys-particle">Bugs</a></li>
+            <li class="specifications"><a href="https://blueprints.launchpad.net/esys-particle">Blueprints</a></li>
+            <li class="translations"><a href="https://translations.launchpad.net/esys-particle">Translations</a></li>
+            <li class="answers active"><a href="https://answers.launchpad.net/esys-particle">Answers</a></li>
+        </ul>
+    </div>
+    <div class="yui-t4" id="yui_3_10_3_1_1506786516719_142">
+        <div id="maincontent" class="yui-main">
+            <div class="yui-b" xml:lang="en" dir="ltr" id="yui_3_10_3_1_1506786516719_141" lang="en">
+                <div class="context-publication">
+                    <h1>Problems with installation in Ubuntu 16.04</h1>
+                    <div id="registration" class="registering">
+                        Asked by
+                        <a href="https://launchpad.net/~gonzalo" class="sprite person">Gonzalo Tancredi</a>
+                        <span title="2016-08-25 18:43:43 UTC">on 2016-08-25</span>
+                    </div>
+                </div>
+                <div id="request-notifications">
+                </div>
+                <div id="yui_3_10_3_1_1506786516719_140">
+                    <div class="report" id="yui_3_10_3_1_1506786516719_139"><p>My system manager upgrade the computer
+                        from Ubuntu 14.04 to 16.04.<br>
+                        In Ubuntu 14.04, I was running esys-particle without problems, but after the upgrade I could not
+                        install essays-particle again.</p>
+                        <p>I am trying to install the esys trunk version 2.3.4</p>
+                        <p>When I run the ./configure I get the following error:<br>
+                            checking for Boost headers version &gt;= 1.34.1... yes<br>
+                            checking for Boost's header version...<br>
+                            ./configure: line 19542: let: major_version=
+                            <wbr></wbr>
+                            /100000: syntax error: operand expected (error token is "/100000")<br>
+                            ./configure: line 19543: let: minor_version=
+                            <wbr></wbr>
+                            /100%1000: syntax error: operand expected (error token is "/100%1000")<br>
+                            ./configure: line 19544: let: patch_level=%100: syntax error: operand expected (error token
+                            is "%100")<br>
+                            ./configure: line 19549: test: : integer expression expected<br>
+                            ./configure: line 19554: test: : integer expression expected<br>
+                            Boost Version is .<br>
+                            configure: error: invalid value: boost_major_
+                            <wbr></wbr>
+                            version=
+                        </p>
+                        <p>It seems that the variable ${boost_
+                            <wbr></wbr>
+                            cv_full_
+                            <wbr></wbr>
+                            lib_version} is not set.
+                        </p>
+                        <p>I am using lib boost version 1.58<br>
+                            I found it with:<br>
+                            dpkg -S /usr/include/
+                            <wbr></wbr>
+                            boost/version.
+                            <wbr></wbr>
+                            hpp<br>
+                            &gt;&gt; libboost1.
+                            <wbr></wbr>
+                            58-dev:
+                            <wbr></wbr>
+                            amd64: /usr/include/
+                            <wbr></wbr>
+                            boost/version.
+                            <wbr></wbr>
+                            hpp
+                        </p>
+                        <p>Any help?</p>
+                        <p>I could also fire my system manager, but it is very difficult to get a new one.</p>
+                        <p>Regards</p></div>
+                    <div class="portlet" id="yui_3_10_3_1_1506786516719_149">
+                        <h2>Question information</h2>
+                        <div class="yui-g" id="yui_3_10_3_1_1506786516719_148">
+                            <div class="yui-u first">
+
+                                <div id="portlet-details" xml:lang="en" dir="ltr" lang="en">
+                                    <div class="two-column-list">
+                                        <dl id="question-lang">
+                                            <dt>Language:</dt>
+                                            <dd>
+                                                English
+                                                <a href="https://answers.launchpad.net/esys-particle/+question/365307/+edit"
+                                                   class="menu-link-edit sprite edit action-icon">Edit question</a>
+                                            </dd>
+                                        </dl>
+                                        <dl id="question-status">
+                                            <dt>Status:</dt>
+                                            <dd>
+                                                <span class="questionstatusSOLVED">Solved</span>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>For:</dt>
+                                            <dd>
+                                                <a href="https://launchpad.net/esys-particle" class="bg-image"
+                                                   style="background-image: url(https://launchpadlibrarian.net/14695418/silo_icon.png)">ESyS-Particle</a>
+                                                <a href="https://answers.launchpad.net/esys-particle/+question/365307/+edit"
+                                                   class="menu-link-edit sprite edit action-icon">Edit question</a>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Assignee:</dt>
+                                            <dd>
+                                                No assignee
+                                                <a href="https://answers.launchpad.net/esys-particle/+question/365307/+edit"
+                                                   class="menu-link-edit sprite edit action-icon">Edit question</a>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Solved by:</dt>
+                                            <dd>
+                                                <a href="https://launchpad.net/~gonzalo" class="sprite person">Gonzalo
+                                                    Tancredi</a>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Solved:</dt>
+                                            <dd>
+                                                <span title="2016-09-01 14:22:07 UTC">2016-09-01</span>
+                                            </dd>
+                                        </dl>
+                                        <dl style="clear: both;">
+                                            <dt>Last query:</dt>
+                                            <dd>
+                                                <span title="2016-09-01 14:22:07 UTC">2016-09-01</span>
+                                            </dd>
+                                        </dl>
+                                        <dl>
+                                            <dt>Last reply:</dt>
+                                            <dd>
+                                                <span title="2016-09-01 03:48:56 UTC">2016-09-01</span>
+                                            </dd>
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="yui-u" id="yui_3_10_3_1_1506786516719_147">
+                                <div id="related-bugs">
+                                    <h3>Related bugs</h3>
+                                    <ul>
+                                    </ul>
+                                </div>
+                                <ul class="horizontal">
+                                    <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+linkbug"
+                                           class="menu-link-linkbug sprite add">Link existing bug</a></li>
+                                </ul>
+                                <div id="related-faq" style="margin-top: 1em;">
+                                    <h3>Related FAQ:</h3>
+                                    <p>
+                                        None
+                                        <a href="https://answers.launchpad.net/esys-particle/+question/365307/+linkfaq"
+                                           class="menu-link-linkfaq sprite add action-icon"
+                                           title="Link this question to a FAQ.">Link to a FAQ</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div itemscope="" itemtype="http://schema.org/UserComments" class="boardComment" id="comment-14">
+                        <div class="boardCommentDetails">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="https://launchpad.net/~gonzalo" class="sprite person">Gonzalo Tancredi
+                                            (gonzalo)</a>
+
+                                        said
+                                        <time itemprop="commentTime" datetime="2016-09-01T14:22:07.752843+00:00"
+                                              title="2016-09-01 14:22:07 UTC">on 2016-09-01
+                                        </time>
+                                        :
+                                    </td>
+                                    <td class="bug-comment-index">
+                                        <a> #15</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="boardCommentBody" itemprop="commentText" id="yui_3_10_3_1_1506786516719_144"><p
+                                id="yui_3_10_3_1_1506786516719_145">SOLVED !!!</p>
+                            <p>Hi Vince</p>
+                            <p>The problem is it solved with your last suggestion:</p>
+                            <p>In the original file Config/boost.m4 change line 86 from:</p>
+                            <p>(eval "$ac_cpp conftest.$ac_ext") 2&gt;&amp;AS_MESSAGE_
+                                <wbr></wbr>
+                                LOG_FD |
+                            </p>
+                            <p>to:</p>
+                            <p>(eval "$ac_cpp -P conftest.$ac_ext") 2&gt;&amp;AS_MESSAGE_
+                                <wbr></wbr>
+                                LOG_FD |
+                            </p>
+                            <p>&nbsp;run autogen.sh and then configure</p>
+                            <p>It also solve the same problem with the installation of Gengeo.<br>
+                                In that case, you must change config/boost.m4.</p>
+                            <p>Thank you very much !!!</p>
+                            <p>Best regards</p>
+                            <p>Gonzalo</p></div>
+                    </div>
+                    <div itemscope="" itemtype="http://schema.org/UserComments" class="boardComment" id="comment-15">
+                        <div class="boardCommentDetails">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <a href="https://launchpad.net/~v-boros" class="sprite person">Vince Boros
+                                            (v-boros)</a>
+                                        said
+                                        <time itemprop="commentTime" datetime="2016-09-01T23:14:35.252775+00:00"
+                                              title="2016-09-01 23:14:35 UTC">on 2016-09-01
+                                        </time>
+                                        :
+                                    </td>
+                                    <td class="bug-comment-index">
+                                        <a> #16</a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="boardCommentBody" itemprop="commentText"><p>Hello Gonzalo:</p>
+                            <p>That is very good. As you may have guessed, "-P Inhibit[s] generation of linemarkers in
+                                the output from the preprocessor. This might be useful when running the preprocessor on
+                                something that is not C code, and will be sent to a program which might be confused by
+                                the linemarkers." (From <a rel="nofollow"
+                                                           href="https://gcc.gnu.org/onlinedocs/gcc/Preprocessor-Options.html">https:/
+                                    <wbr></wbr>
+                                    /gcc.gnu.
+                                    <wbr></wbr>
+                                    org/onlinedocs/
+                                    <wbr></wbr>
+                                    gcc/Preprocesso
+                                    <wbr></wbr>
+                                    r-Options.
+                                    <wbr></wbr>
+                                    html</a>.) Although the code snippet in conftest.cpp is C or C++, programs creating
+                                and then reading conftest.i were "confused," as was I for a while.
+                            </p>
+                            <p>I will update the ESyS-Particle and GenGeo repositories with the patch in the next few
+                                days. Thank you very much for your patience and your testing. It got us to the solution
+                                much quicker than otherwise.</p>
+                            <p>Regards,</p>
+                            <p>Vince</p></div>
+                    </div>
+                    <div id="question" xml:lang="en" dir="en" lang="en">
+                        <div class="yui-g">
+                            <ul class="horizontal" id="horizontal-menu">
+                                <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+history"
+                                       class="menu-link-history sprite list">History</a></li>
+                                <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+linkbug"
+                                       class="menu-link-linkbug sprite add">Link existing bug</a></li>
+                                <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+makebug"
+                                       class="menu-link-makebug sprite add"
+                                       title="Create a bug report from this question.">Create bug report</a></li>
+                                <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+linkfaq"
+                                       class="menu-link-linkfaq sprite add" title="Link this question to a FAQ.">Link to
+                                    a FAQ</a></li>
+                                <li><a href="https://answers.launchpad.net/esys-particle/+question/365307/+createfaq"
+                                       class="menu-link-createfaq sprite add"
+                                       title="Create a new FAQ from this question.">Create a new FAQ</a></li>
+                            </ul>
+                        </div>
+                        <div align="center">
+                            To post a message you must <a href="+login">log in</a>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="footer">
+        <div class="lp-arcana">
+            <div class="lp-branding">
+                <a href="https://launchpad.net/"><img src="./launchpad-logo-and-name-hierarchy.png"
+                                                      alt="Launchpad"></a>
+                &nbsp;•&nbsp;
+                <a href="https://launchpad.net/+tour">Take the tour</a>
+                &nbsp;•&nbsp;
+                <a href="https://help.launchpad.net/">Read the guide</a>
+                &nbsp;
+                <form id="globalsearch" method="get" accept-charset="UTF-8" action="https://launchpad.net/+search">
+                    <input id="search-text" name="field.text" type="search">
+                    <input src="./search.png" style="vertical-align:5%" alt="Search Launchpad" type="image">
+                </form>
+            </div>
+        </div>
+        <div class="colophon">
+            &copy; 2004-2017
+            <a href="http://canonical.com/">Canonical&nbsp;Ltd.</a>
+            &nbsp;•&nbsp;
+            <a href="https://launchpad.net/legal">Terms of use</a>
+            &nbsp;•&nbsp;
+            <a href="/feedback">Contact Launchpad Support</a>
+
+            &nbsp;•&nbsp;
+            <a href="http://blog.launchpad.net/">Blog</a>
+
+            &nbsp;•&nbsp;
+            <a href="http://www.canonical.com/about-canonical/careers">Careers</a>
+
+            &nbsp;•&nbsp;
+            <a href="https://twitter.com/launchpadstatus">System status</a>
+            <span id="lp-version">
+      &nbsp;•&nbsp;
+        r18471
+        (<a href="https://dev.launchpad.net/">Get the code!</a>)
+      </span>
+        </div>
+    </div>
+</div>
+</body></html>

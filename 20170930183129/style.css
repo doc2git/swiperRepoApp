@@ -1,0 +1,55 @@
+.outer::after  { display: table; content: ""; }
+#wrap, body { background: rgb(238, 238, 238) none repeat scroll 0% 0%; }
+#container  { position: relative; }
+body { width: 100%; }
+a  { margin: 0px; padding: 0px; border: 0px none; outline: 0px none; font-weight: inherit; font-style: inherit; font-family: inherit; font-size: 100%; vertical-align: baseline; }
+ol, ul { list-style: outside none none; }
+table { border-collapse: separate; border-spacing: 0px; }
+@font-face {
+    font-family: "FontAwesome";
+    font-style: normal;
+    font-weight: 400;
+    src: url("fontawesome-webfont.eot") format("embedded-opentype"), url("fontawesome-webfont.woff") format("woff"), url("fontawesome-webfont.ttf") format("truetype"), url("fontawesome-webfont.svg") format("svg");
+}
+#container, body, html { height: 100%; }
+body { color: rgb(0, 0, 0); font: 14px/1.6em "Helvetica Neue",Helvetica,Arial,sans-serif; }
+.outer { max-width: 1220px; margin: 0px auto; padding: 0px 20px; }
+#wrap { position: absolute; top: 0px; left: 0px; transition: all 0.2s ease-out 0s; z-index: 1; }
+.article-entry h1 a:hover, .article-entry h2 a:hover, .article-entry h3 a:hover, .article-entry h4 a:hover, .article-entry h5 a:hover, .article-entry h6 a:hover, .widget h1 a:hover, .widget h2 a:hover, .widget h3 a:hover, .widget h4 a:hover, .widget h5 a:hover, .widget h6 a:hover { color: rgb(37, 143, 184); }
+.article-entry h2  { font-weight: 600; margin-bottom: 10px; }
+.article-entry h2  { font-size: 1.5em; }
+.article-entry ol  { list-style: outside none decimal; }
+.main-nav-link:hover, .nav-icon:hover { opacity: 1; }
+.search-form-submit:focus, .search-form-submit:hover { color: rgb(119, 119, 119); }
+.article { margin: 50px 0px; }
+.article-date { float: left; }
+.article-category { float: left; line-height: 1em; color: rgb(204, 204, 204); text-shadow: 0px 1px rgb(255, 255, 255); margin-left: 8px; }
+.article-category-link { margin: 0px 12px 1em; }
+.article-header { padding: 20px 0px 20px 20px; background-color: rgb(221, 221, 221); }
+.article-title { text-decoration: none; font-size: 2em; font-weight: 700; color: rgb(85, 85, 85); line-height: 1.1em; transition: color 0.2s ease 0s; }
+.article-entry { color: rgb(85, 85, 85); padding: 0px 20px; }
+.article-entry p, .article-entry table { line-height: 1.6em; margin: 1.6em 0px; }
+.article-entry a { color: rgb(37, 143, 184); text-decoration: none; }
+.article-entry a:hover { text-decoration: underline; }
+.article-entry table { width: 100%; border-collapse: collapse; border-spacing: 0px; }
+.article-entry td { border-bottom: 1px solid rgb(221, 221, 221); padding: 10px 0px; }
+.article-extension a:hover { text-decoration: underline; }
+.article-footer a:hover { color: rgb(85, 85, 85); }
+.article-share { float: right; padding-right: 20px; }
+.article-nav-link-wrap:hover { color: rgb(85, 85, 85); }
+#footer a:hover, .article-entry .gist .gist-file .gist-meta a:hover { text-decoration: underline; }
+.article-entry .highlight, .article-entry pre { background: rgb(39, 40, 34) none repeat scroll 0% 0%; margin: 0px -20px; padding: 15px 20px; border-style: solid; border-color: rgb(221, 221, 221); border-width: 1px 0px; overflow: auto; color: rgb(248, 248, 242); line-height: 22.4px; }
+.article-entry .highlight pre { border: medium none; margin: 0px; padding: 0px; }
+.article-entry .highlight table { margin: 0px; width: auto; }
+.article-entry .highlight td { border: medium none; padding: 0px; }
+.article-entry .highlight .gutter pre { text-align: right; padding-right: 20px; }
+.article-entry .highlight .line { height: 22.4px; }
+pre .comment  { color: rgb(117, 113, 94); }
+pre .built_in  { color: rgb(174, 129, 255); }
+.toc-article { box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.176); background: rgb(255, 255, 255) none repeat scroll 0% 0%; margin: 0.5em; padding: 0.5em; }
+#toc { float: right; line-height: 2em; font-size: 1em; height: 12em; border-radius: 5px; padding: 0 20px; }
+#toc .toc { padding: 0px; }
+#toc .toc li { list-style-type: none; }
+.widget a:hover { text-decoration: underline; color: rgb(37, 143, 184); }
+.google-cse-form-submit:focus, .google-cse-form-submit:hover { color: rgb(119, 119, 119); }
+.baidu-cse-form-submit:focus, .baidu-cse-form-submit:hover { color: rgb(119, 119, 119); }

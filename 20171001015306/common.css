@@ -1,0 +1,19 @@
+/* Code tidied up by ScrapBook */
+body { background-color: rgb(255, 255, 255); }
+.main { width: 1000px; margin: 0px auto; position: relative; }
+.article-content { border: 1px solid rgb(188, 213, 229); padding: 0px; }
+.article-content .title h1 { color: rgb(51, 51, 51); font: 600 16px "microsoft yahei",arial; margin-bottom: 10px; text-align: center; padding: 15px 0px 10px; border-bottom: 1px solid rgb(188, 213, 229); }
+#content { width: 660px; padding: 20px 5px 0px; margin: 0px 10px; text-align: left; line-height: 180%; clear: both; font-size: 14px; overflow-wrap: break-word; word-break: break-all; overflow: hidden; }
+#content table { border: 1px solid rgb(204, 204, 204); border-collapse: collapse; text-align: center; margin-top: 0.54em; clear: both; }
+#content th, #content td { padding: 0.2em 0.46em; border: 1px solid rgb(204, 204, 204); }
+#content p { padding: 5px 0px; font-size: 14px; }
+#content span { line-height: 180%; font-size: 12px; }
+#content div { line-height: 180%; font-size: 14px; }
+#content a:link { color: rgb(0, 102, 153); font-size: 14px; text-decoration: none; }
+#content a:visited { color: rgb(0, 102, 153); font-size: 14px; }
+#content a:hover { color: red; font-size: 14px; }
+#content .jb51code { margin: 0px; padding: 0px; width: 660px; overflow: hidden; clear: both; text-align: left; }
+#content pre, #content code { background: rgb(255, 255, 255) none repeat scroll 0% 0%; margin: 3px auto 0px; padding: 0px 0px 0px 5px; width: 640px; line-height: 20px; clear: both; font-size: 14px; border-left: 3px solid rgb(108, 226, 108); }
+#content p > code, #content li > code { padding: 2px 4px; font-size: 12px; line-height: 1.5; color: rgb(199, 37, 78); background-color: rgb(249, 242, 244); border-radius: 0px; border: 1px solid rgb(204, 204, 204); font-family: Menlo,Monaco,Consolas,"Courier New",monospace; }
+#footer { background: rgb(250, 250, 250) none repeat scroll 0% 0%; padding: 20px 0px; margin-top: 35px; }
+#footer p { text-align: center; color: rgb(85, 85, 85); line-height: 24px; }
